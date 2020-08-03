@@ -5,7 +5,7 @@ class Inventory extends React.Component {
         return (
             <Fragment>
                 <div className="inventory">
-                    Inventory!!!
+                    Inventory!!!!!!
                 </div>
             </Fragment>
         )

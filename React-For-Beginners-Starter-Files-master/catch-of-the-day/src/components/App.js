@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import Header from "./Header.js";
 import Order from "./Order.js";
 import Inventory from "./Inventory.js";
@@ -11,6 +12,10 @@ class App extends React.Component {
         fishes: {},
         order: {}
     };
+
+    static propTypes = {
+        match: PropTypes.object
+    }
 
     componentDidMount() {
         const {params} = this.props.match;
@@ -55,6 +60,15 @@ class App extends React.Component {
         this.setState({fishes});
     }
 
+    deleteFish = (key) => {
+        // 1. take a copy of state
+        const fishes = {...this.state.fishes}
+        // 2. update the state
+        fishes[key] = null;
+        // 3. update state
+        this.setState({fishes});
+    }
+
     loadSampleFishes = () => {
         this.setState({ fishes: sampleFishes });
     }
@@ -66,6 +80,15 @@ class App extends React.Component {
         order[key] = order[key] + 1 || 1;
         // 3. call setState to update our state object
         this.setState({order: order});
+    }
+
+    removeFromOrder = (key) => {
+        // 1. take a copy of state
+        const order = { ...this.state.order };
+        // 2. remove that item from order
+        delete order[key];
+        // 3. call setState to update our state object
+        this.setState({ order: order });
     }
 
     render() { 
@@ -80,8 +103,8 @@ class App extends React.Component {
                             )}
                         </ul>
                     </div>
-                    <Order fishes={this.state.fishes} order={this.state.order} />
-                    <Inventory fishes={this.state.fishes} addFish={this.addFish} updateFish={this.updateFish} loadSampleFishes={this.loadSampleFishes}/>
+                    <Order removeFromOrder={this.removeFromOrder} fishes={this.state.fishes} order={this.state.order} />
+                    <Inventory storeId={this.props.match.params.storeId} fishes={this.state.fishes} addFish={this.addFish} updateFish={this.updateFish} deleteFish={this.deleteFish} loadSampleFishes={this.loadSampleFishes}/>
                 </div>
             </Fragment>
         )
